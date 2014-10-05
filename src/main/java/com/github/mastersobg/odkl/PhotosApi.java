@@ -1,7 +1,5 @@
 package com.github.mastersobg.odkl;
 
-import com.github.mastersobg.odkl.OdklApi;
-import com.github.mastersobg.odkl.OdklRequest;
 import com.github.mastersobg.odkl.exception.OdklApiRuntimeException;
 import com.github.mastersobg.odkl.model.Photo;
 import com.github.mastersobg.odkl.util.JsonUtil;
@@ -16,6 +14,7 @@ public class PhotosApi {
     PhotosApi(OdklApi api) {
         this.api = api;
     }
+
 
     public Photo getPhotoInfo(Long photoId) {
         if (photoId == null) {

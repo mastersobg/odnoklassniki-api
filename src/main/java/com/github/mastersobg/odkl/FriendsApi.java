@@ -1,5 +1,7 @@
 package com.github.mastersobg.odkl;
 
+import com.github.mastersobg.odkl.exception.OdklApiRuntimeException;
+import com.github.mastersobg.odkl.photoGrabber.PhotoGrabberConfig;
 import com.github.mastersobg.odkl.util.JsonUtil;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -15,7 +17,7 @@ public class FriendsApi {
 
     private final OdklApi api;
 
-    FriendsApi(OdklApi api) {
+    public FriendsApi(OdklApi api) {
         this.api = api;
     }
 
@@ -34,6 +36,22 @@ public class FriendsApi {
 
         JSONArray json = JsonUtil.parseArray(api.sendRequest(request));
         return parseLongs(json);
+    }
+
+    public List<String> getFriends(String targetUserId) {
+        try {
+            List<String> resFriendList = new ArrayList<String>();
+            OdklRequest request = api.createApiRequest("friends", "get")
+                    .addParam("fid", String.valueOf(targetUserId));
+            JSONArray json = JsonUtil.parseArray(api.sendRequest(request));
+            for (int i = 0; i < json.size(); i++) {
+                resFriendList.add((String) json.get(i));
+            }
+            return resFriendList;
+        } catch (OdklApiRuntimeException e) {
+            if (PhotoGrabberConfig.LOGS) System.out.println("[ERR] Runtime error. Can't get friends. Connection failed");
+        }
+        return null;
     }
 
     /**
